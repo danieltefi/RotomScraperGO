@@ -4,8 +4,8 @@ Detalha as etapas de construção do scraper automatizado para eventos de Pokém
 
 ## 🟢 1. Configuração e Arquitetura POO
 - [x] Inicializar o repositório Git e configurar `.gitignore`.
-- [ ] Criar ambiente virtual Python (`venv`) 
-- [ ] Instalar dependências
+- [x] Criar ambiente virtual Python (`venv`) 
+- [x] Instalar dependências
 - [ ] **Arquitetura:** Planejar a classe `PokemonEvent` (modelo de dados).
 - [ ] **Arquitetura:** Planejar a classe `RotomScraper` (motor de extração).
 
@@ -29,7 +29,7 @@ Detalha as etapas de construção do scraper automatizado para eventos de Pokém
 
 ## 🔴 5. Finalização e Documentação
 - [x] Criar `README.md` com o conceito do projeto (O Rotom como assistente de dados).
-- [ ] Adicionar instruções de instalação e execução no README.
+- [x] Adicionar instruções de instalação e execução no README.
 - [ ] Comentar as funções do código explicando a lógica.
 - [ ] Realizar o commit final e push para o GitHub.
 

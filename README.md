@@ -24,11 +24,15 @@ Assim como o Pokémon "entra" nos dispositivos para torná-los inteligentes, o *
 O projeto utiliza **ambiente virtual (venv)** para isolamento de dependências.
 
 ### Instalação:
-1. **Ative o ambiente:**
-   - Windows (PowerShell): `.\venv\Scripts\Activate.ps1`
-   - Windows (CMD): `.\venv\Scripts\activate.bat`
-   - Linux/macOS: `source venv/bin/activate`
-2. **Dependências:** `pip install -r requirements.txt`
+1. **Criar o Ambiente Virtual:**
+   O ambiente virtual isola as bibliotecas do projeto:
+   ```bash
+   python -m venv .venv
+2. **Ative o ambiente:**
+   - Windows (PowerShell): `.\.venv\Scripts\Activate.ps1`
+   - Windows (CMD): `.\.venv\Scripts\activate.bat`
+   - Linux/macOS: `source .venv/bin/activate`
+3. **Dependências:** `pip install -r requirements.txt`
 
 ### Execução:
 - Com o venv ativo: `python main.py`
