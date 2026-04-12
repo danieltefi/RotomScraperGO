@@ -9,12 +9,12 @@ class PokemonEvent: # representa um evento de Pokémon GO extraído da web
 
     def to_dict(self): # converte o objeto em um dicionário, preparando para a construção do JSON
         return {
-            "nome": self.nome,
-            "data_exibicao": self.data_exibicao,
-            "status": self.status,
-            "categoria": self.categoria,
-            "link_imagem": self.link_imagem
+            'nome': self.nome,
+            'data_exibicao': self.data_exibicao,
+            'status': self.status,
+            'categoria': self.categoria,
+            'link_imagem': self.link_imagem
         }
 
     def __str__(self): # define como o objeto será exibido ao usar print()
-        return f"[{self.status}] {self.nome} - {self.data_exibicao}"
+        return f'[{self.status}] {self.nome} - {self.data_exibicao}'
