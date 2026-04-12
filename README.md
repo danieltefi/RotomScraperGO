@@ -45,6 +45,7 @@ RotomScraperGO/
 ├── README.md            # Documentação do projeto
 ├── requirements.txt     # Lista de dependências (bibliotecas)
 └── rotomscraper.py      # Motor de extração e lógica de scraping
+```
 
 ---
 
