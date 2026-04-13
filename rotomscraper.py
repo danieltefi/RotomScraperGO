@@ -27,22 +27,36 @@ class RotomScraper: # motor de extração (encapsulado)
         soup = BeautifulSoup(html, 'html.parser') # analisa o HTML
         lista_eventos = []
 
-        cards = soup.select('.event-card-item') # Leek Duck organiza eventos em cards, select() para encontrar os seletores CSS
+        cards = soup.select('span.event-header-item-wrapper') # Leek Duck organiza eventos em wrappers de header, select() para encontrar os seletores CSS
 
         for card in cards:
             try:
-                nome = card.select_one('.event-text h2').text # extração dos dados usando seletores do site
-                data = card.select_one('.event-text p').text
+                nome = card.select_one('h2').text # extração dos dados usando seletores do site
                 
-                if 'live' in card.get('class', []): # live/upcoming geralmente é uma classe CSS ou etiqueta
+                data_raw = card.get('data-event-date-sort', '') # captura data para maior precisão
+                if data_raw: # verifica se o site entregou a informação de data
+                    data_sem_hora = data_raw.split('T')[0] # .split('T')[0] retira a hora final, [ano-mês-dia]
+                    partes = data_sem_hora.split('-') # split('-'): quebra a data onde tem traço ['ano', 'mês', 'dia']
+                    data = f"{partes[2]}/{partes[1]}/{partes[0]}" # transforma ano, mês, dia em dia/mês/ano
+                else:
+                    data = 'Data Indisponível'
+                
+                if card.find_parent('div', class_='events-section-live'): # verifica se o card está dentro da seção de eventos ativos (happening now)
                     status = 'Ativo'
                 else:
                     status = 'Futuro'
                 
-                categoria = card.get('data-category', 'Geral')
+                categoria_tag = card.select_one('.event-item-wrapper p') # categoria fica no texto do parágrafo do wrapper
+                if categoria_tag:
+                    categoria = categoria_tag.text
+                else:
+                    categoria = 'Geral'
                 
-                img_tag = card.select_one('.event-img img') # captura do link da imagem
-                link_img = img_tag['src'] if img_tag else ''
+                img_tag = card.select_one('.event-img-wrapper img') # captura do link da imagem
+                if img_tag:
+                    link_img = img_tag['src']
+                else:
+                    link_img = ''
 
                 evento = PokemonEvent(nome, data, status, categoria, link_img) # cria o objeto da classe PokemonEvent
                 lista_eventos.append(evento)
