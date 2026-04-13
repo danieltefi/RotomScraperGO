@@ -54,4 +54,4 @@ RotomScraperGO/
 ---
 
 ### 🚧 Status do Projeto: 
-*Em desenvolvimento*
+*Finalizado*

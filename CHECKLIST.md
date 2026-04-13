@@ -22,16 +22,16 @@ Detalha as etapas de construção do scraper automatizado para eventos de Pokém
 - [x] Implementar tratamento de exceções (`try/except`) para campos ausentes ou erros de conexão.
 
 ## 🟠 4. Persistência e Inteligência JSON
-- [ ] Integrar a biblioteca `datetime` para registrar a data da extração no arquivo.
-- [ ] Implementar o método `save_to_json()` que salve a lista de objetos de forma organizada.
-- [ ] Configurar `indent=4` e `ensure_ascii=False` (para garantir acentos corretos em Português).
-- [ ] Garantir que o script sobrescreva o JSON anterior para manter os dados sempre atuais.
+- [x] Integrar a biblioteca `datetime` para registrar a data da extração no arquivo.
+- [x] Implementar o método `json.dump` que salve a lista de objetos de forma organizada.
+- [x] Configurar `indent=4` e `ensure_ascii=False` (para garantir acentos corretos em Português).
+- [x] Garantir que o script sobrescreva o JSON anterior para manter os dados sempre atuais.
 
 ## 🔴 5. Finalização e Documentação
 - [x] Criar `README.md` com o conceito do projeto (O Rotom como assistente de dados).
 - [x] Adicionar instruções de instalação e execução no README.
-- [ ] Comentar as funções do código explicando a lógica.
-- [ ] Realizar o commit final e push para o GitHub.
+- [x] Comentar as funções do código explicando a lógica.
+- [x] Realizar o commit final e push para o GitHub.
 
 ---
-*Status Atual: 🚀 Em desenvolvimento.*
+*Status Atual: 🚀 Finalizado*
