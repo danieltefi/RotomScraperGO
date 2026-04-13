@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from pokemonevent import PokemonEvent
+from datetime import datetime
 
 class RotomScraper: # motor de extração (encapsulado)
 
@@ -25,7 +26,12 @@ class RotomScraper: # motor de extração (encapsulado)
             return []
 
         soup = BeautifulSoup(html, 'html.parser') # analisa o HTML
-        lista_eventos = []
+        lista_eventos = [] # guarda todos os eventos encotrados
+        nomes_processados = set() # guarda os nomes dos eventos já processados para evitar duplicados no JSON
+        
+        hoje = datetime.now() # variáveis para os filtros automáticos de mês e status, guarda a data do dia
+        mes_atual = hoje.strftime('-%m-') # guarda o mês atual, para filtrar eventos apenas do mês
+        data_hoje_comparacao = hoje.strftime('%Y-%m-%d') # formata para o padrao internacional para comparar futuramente se é ativo ou futuro
 
         cards = soup.select('span.event-header-item-wrapper') # Leek Duck organiza eventos em wrappers de header, select() para encontrar os seletores CSS
 
@@ -33,33 +39,42 @@ class RotomScraper: # motor de extração (encapsulado)
             try:
                 nome = card.select_one('h2').text # extração dos dados usando seletores do site
                 
+                if nome in nomes_processados: # verifica se o evento já foi adicionado para evitar repetições
+                    continue
+                
                 data_raw = card.get('data-event-date-sort', '') # captura data para maior precisão
+                
+                if mes_atual not in data_raw: # filtro temporal: pula eventos que não sejam do mês atual
+                    continue
+                
                 if data_raw: # verifica se o site entregou a informação de data
-                    data_sem_hora = data_raw.split('T')[0] # .split('T')[0] retira a hora final, [ano-mês-dia]
-                    partes = data_sem_hora.split('-') # split('-'): quebra a data onde tem traço ['ano', 'mês', 'dia']
+                    data_iso = data_raw.split('T')[0] # formato para comparação [ano-mês-dia]
+                    partes = data_iso.split('-') # split('-'): quebra a data onde tem traço ['ano', 'mês', 'dia']
                     data = f"{partes[2]}/{partes[1]}/{partes[0]}" # transforma ano, mês, dia em dia/mês/ano
+                    
+                    if data_iso <= data_hoje_comparacao: # refinamento do status, compara a data do evento com a data do dia
+                        status = 'Ativo' # adiciona eventos como ativo se a data for = ou < que a do dia (menor pq um evento pode ter começado antes e ainda nao finalizou, por isso esta como ativo)
+                    else:
+                        status = 'Futuro' # adciona eventos como futuro se a data for > que a do dia
                 else:
                     data = 'Data Indisponível'
-                
-                if card.find_parent('div', class_='events-section-live'): # verifica se o card está dentro da seção de eventos ativos (happening now)
-                    status = 'Ativo'
-                else:
-                    status = 'Futuro'
+                    status = 'Futuro' # se o evento n tiver data, adiciona em futuro
                 
                 categoria_tag = card.select_one('.event-item-wrapper p') # categoria fica no texto do parágrafo do wrapper
                 if categoria_tag:
-                    categoria = categoria_tag.text
+                    categoria = categoria_tag.text # captura a categoria e a guarda
                 else:
-                    categoria = 'Geral'
+                    categoria = 'Geral' # se erro ou categoria indefinida -> geral
                 
                 img_tag = card.select_one('.event-img-wrapper img') # captura do link da imagem
                 if img_tag:
-                    link_img = img_tag['src']
+                    link_img = img_tag['src'] # link da imagem
                 else:
-                    link_img = ''
+                    link_img = '' # sem imagem
 
-                evento = PokemonEvent(nome, data, status, categoria, link_img) # cria o objeto da classe PokemonEvent
-                lista_eventos.append(evento)
+                evento = PokemonEvent(nome, data, status, categoria, link_img) # cria o objeto (evento) da classe PokemonEvent
+                lista_eventos.append(evento) # adiciona o evento na lista final que será salva no JSON
+                nomes_processados.add(nome) # registra que o evento já foi processado para evitar duplicatas
                 
             except AttributeError:
                 continue # pula cards que não tenham a estrutura esperada
